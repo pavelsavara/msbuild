@@ -51,17 +51,18 @@ jobs:
     runs-on: ${{ matrix.source }}
     # if: ${{ github.ref_name == matrix.source }}
 
-    # use the latest version of the script from the main branch of arcade repo
-    uses: dotnet/arcade/.github/workflows/inter-branch-merge-base.yml@main
-    with:
-      # this is the branch which will receive the new PR when there are changes in the trigger branches
-      base_branch: ${{ matrix.target }}
-
-      # Don't allow the commits made by the dotnet-maestro[bot].
-      # allowAutomatedCommits: false
-      
-      # Do not tag authors of the original PRs and do produce comments when existing PR is updated. Reduces GitHub notifications noise on the new (automated) PR
-      # quietComments: true
-
+    steps:
       # use the latest version of the script from the main branch of arcade repo
-      # script_version: 'main' 
+      - uses: dotnet/arcade/.github/workflows/inter-branch-merge-base.yml@main
+        with:
+          # this is the branch which will receive the new PR when there are changes in the trigger branches
+          base_branch: ${{ matrix.target }}
+
+          # Don't allow the commits made by the dotnet-maestro[bot].
+          # allowAutomatedCommits: false
+          
+          # Do not tag authors of the original PRs and do produce comments when existing PR is updated. Reduces GitHub notifications noise on the new (automated) PR
+          # quietComments: true
+
+          # use the latest version of the script from the main branch of arcade repo
+          # script_version: 'main' 
