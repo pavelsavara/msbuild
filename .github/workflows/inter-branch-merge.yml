@@ -1,0 +1,67 @@
+name: Inter-branch merge workflow
+on:
+  push:
+    branches:
+      # TODO - vs16.11
+      # TODO - vs17.0
+      # TODO - vs17.3
+      # TODO - vs17.4
+      # TODO - vs17.6
+      # TODO - vs17.8
+      # TODO - vs17.9
+      - vs17.10
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  merge-from-to:
+    # strategy here helps with mapping the source and target branches
+    strategy:
+      matrix:
+        source: []
+        target: []
+        include:
+          # VS until 4/2029 -> SDK 6.0.1xx
+          - source: 'vs16.11'
+            target: 'vs17.0'
+          # SDK 6.0.1xx -> SDK 6.0.4xx
+          - source: 'vs17.0'
+            target: 'vs17.3'
+          # SDK 6.0.4xx -> SDK 7.0.1xx until 5/2024, VS until 7/2024
+          - source: 'vs17.3'
+            target: 'vs17.4'
+          # VS until 1/2025
+          - source: 'vs17.4'
+            target: 'vs17.6'
+          # VS until 7/2025
+          - source: 'vs17.6'
+            target: 'vs17.8'
+          # SDK 8.0.1xx -> SDK 8.0.2xx
+          - source: 'vs17.8'
+            target: 'vs17.9'
+          # SDK 8.0.2xx -> SDK 8.0.3xx
+          - source: 'vs17.9'
+            target: 'vs17.10'
+          # latest release -> main
+          - source: 'vs17.10'
+            target: 'main'
+
+    # we only run the line(s) of the matrix that matches the trigger branch
+    runs-on: ${{ matrix.source }}
+    if: ${{ github.ref_name == matrix.source }}
+
+    # use the latest version of the script from the main branch of arcade repo
+    uses: dotnet/arcade/.github/workflows/inter-branch-merge-base.yml@main
+    with:
+      # this is the branch which will receive the new PR when there are changes in the trigger branches
+      base_branch: ${{ matrix.target }}
+
+      # Don't allow the commits made by the dotnet-maestro[bot].
+      # allowAutomatedCommits: false
+      
+      # Do not tag authors of the original PRs and do produce comments when existing PR is updated. Reduces GitHub notifications noise on the new (automated) PR
+      # quietComments: true
+
+      # use the latest version of the script from the main branch of arcade repo
+      # script_version: 'main' 
