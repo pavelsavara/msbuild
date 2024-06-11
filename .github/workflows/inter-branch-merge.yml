@@ -49,11 +49,11 @@ jobs:
 
     # we only run the line(s) of the matrix that matches the trigger branch
     runs-on: ${{ matrix.source }}
-    if: ${{ github.ref_name == matrix.source }}
 
     # use the latest version of the script from the main branch of arcade repo
     uses: dotnet/arcade/.github/workflows/inter-branch-merge-base.yml@main
     with:
+      if: ${{ github.ref_name == matrix.source }}
       # this is the branch which will receive the new PR when there are changes in the trigger branches
       base_branch: ${{ matrix.target }}
 
