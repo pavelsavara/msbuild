@@ -1,0 +1,22 @@
+name: Inter-branch merge workflow
+# this file triggers the merge flow between branches of this repository, the same workflow trigger will exist in each branch of this repository
+# the workflow is implemented and documented in https://github.com/dotnet/arcade/blob/main/.github/workflows/inter-branch-merge-base.yml
+
+on:
+  push:
+    branches:
+      - 'vs*'
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  check-script:
+    uses: dotnet/arcade/.github/workflows/inter-branch-merge-base.yml@main
+    with:
+      # the mapping between source and target branches is always in main branch, all the other branches could contain the file but it will be ignored
+      configuration_file_branch: 'main'
+      # the configuration file is in the .config folder
+      # only the branches that have valid configuration there, will create a pull request
+      configuration_file_path: '.config/github-merge-flow.jsonc'
