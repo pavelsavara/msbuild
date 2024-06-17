@@ -19,4 +19,4 @@ jobs:
       configuration_file_branch: 'main'
       # the configuration file is in the .config folder
       # only the branches that have valid configuration there, will create a pull request
-      configuration_file_path: '.config/git-merge-flow-config.jsonc'
+      configuration_file_path: '.config/github-merge-flow.jsonc'
